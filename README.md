@@ -1,0 +1,2 @@
+# github.io
+Partner locations
