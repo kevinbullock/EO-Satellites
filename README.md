@@ -1,3 +1,5 @@
+I am aggregating a list of Earth Observation sources and pertinent info, feel free to contribute. 
+
 | Source Name              | URL            | Data Type           | Resolution        | License         | Cost  | API Access | Notes                    |
 |--------------------------|-------------------|--------------------|-------------------|------------------|-------|------------|--------------------|
 | Sentinel Hub | [link](https://scihub.copernicus.eu) | Satellite (Optical, SAR) | 10–60m | CC BY-SA | Free  | Yes | EO Browser and API |
