@@ -65,7 +65,6 @@ I am aggregating a list of Earth Observation sources and pertinent info, feel fr
 | Google Earth Engine | [link](https://earthengine.google.com) | Analysis platform | Varies | Free for research/edu | Free (non-commercial) | Yes | Petabytes of data, cloud processing |
 | Microsoft Planetary Computer | [link](https://planetarycomputer.microsoft.com) | Multiple datasets | Varies | Varies | Free | Yes | Catalog with Sentinel, Landsat, more |
 | AWS Open Data Registry | [link](https://registry.opendata.aws) | Multiple datasets | Varies | Open | Free (egress fees) | Yes | Hosts Sentinel, Landsat, NAIP |
-| Element 84 Earth Search | [link](https://www.element84.com/earth-search) | Search API | N/A | Open | Free | Yes | STAC API for satellite imagery |
 | Radiant Earth MLHub | [link](https://mlhub.earth) | ML-ready datasets | Varies | Varies | Free | Yes | Training data for ML applications |
 
 ---
