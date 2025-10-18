@@ -6,7 +6,6 @@ I am aggregating a list of Earth Observation sources and pertinent info, feel fr
 
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
 |-------------|-----|-----------|------------|---------|------|------------|-------|
-| Sentinel Hub | [link](https://scihub.copernicus.eu) | Satellite (Optical, SAR) | 10–60m | Open (Copernicus) | Free | Yes | EO Browser and API |
 | Copernicus Data Space | [link](https://dataspace.copernicus.eu) | Satellite (Optical, SAR) | 10–60m | Open (Copernicus) | Free | Yes | New platform replacing SciHub |
 | Landsat USGS EarthExplorer | [link](https://earthexplorer.usgs.gov) | Imagery, Elevation, LiDAR | 30m, LiDAR varies | Public Domain | Free | Limited | Historic archive, bulk tools |
 | MODIS (NASA) | [link](https://modis.gsfc.nasa.gov) | Satellite (Optical, Thermal) | 250m–1km | Public Domain | Free | Yes | Daily coverage, climate data |
