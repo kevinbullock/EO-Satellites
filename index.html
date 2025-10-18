@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EO Provider Finder - Smart Assistant</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        body::before {
+            width: 500px;
+            height: 500px;
+            top: -250px;
+            right: -250px;
+        }
+        
+        body::after {
+            width: 400px;
+            height: 400px;
+            bottom: -200px;
+            left: -200px;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            padding: 30px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+        }
+        
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .message {
+            padding: 16px 20px;
+            border-radius: 16px;
+            max-width: 85%;
+            animation: messageSlide 0.4s ease-out;
+            line-height: 1.6;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.assistant {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            align-self: flex-start;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .typing {
+            display: flex;
+            gap: 6px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            width: fit-content;
+            align-self: flex-start;
+        }
+        
+        .typing span {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        .provider-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .provider-card h4 {
+            color: #667eea;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+        
+        .provider-card p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .provider-card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        
+        .provider-card a:hover {
+            text-decoration: underline;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .option-btn {
+            padding: 14px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+        }
+        
+        .option-btn:hover {
+            background: white;
+            transform: translateX(4px);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .input-container {
+            padding: 20px 40px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 12px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+        }
+        
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            color: #667eea;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .restart-btn {
+            padding: 10px 20px;
+            font-size: 13px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">🛰️</div>
+            <h1>EO Provider Finder</h1>
+            <p class="subtitle">Smart assistant to find your perfect satellite data provider</p>
+        </div>
+        
+        <div class="chat-container" id="chatContainer"></div>
+        
+        <div class="input-container" id="inputContainer">
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="userInput" 
+                    placeholder="Type your answer..."
+                    onkeypress="if(event.key==='Enter') sendMessage()"
+                >
+                <button onclick="sendMessage()" id="sendButton">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 'welcome';
+        let userData = {
+            useCase: '',
+            budget: '',
+            dataType: '',
+            resolution: '',
+            updateFrequency: ''
+        };
+
+        const providers = {
+            'sentinel-copernicus': {
+                name: 'Sentinel Hub / Copernicus',
+                url: 'https://scihub.copernicus.eu',
+                description: 'Free optical and SAR imagery at 10-60m resolution. Perfect for regular monitoring with good quality data.',
+                details: 'Resolution: 10-60m | Cost: Free | Updates: Every 5-10 days'
+            },
+            'modis-viirs': {
+                name: 'MODIS / VIIRS',
+                url: 'https://modis.gsfc.nasa.gov',
+                description: 'Free coarse resolution (250m-1km) data with daily global coverage. Great for climate and large-scale monitoring.',
+                details: 'Resolution: 250m-1km | Cost: Free | Updates: Daily'
+            },
+            'landsat': {
+                name: 'Landsat (USGS)',
+                url: 'https://earthexplorer.usgs.gov',
+                description: 'Free 30m optical imagery with a massive historic archive dating back to 1972.',
+                details: 'Resolution: 30m | Cost: Free | Updates: Every 16 days'
+            },
+            'google-earth-engine': {
+                name: 'Google Earth Engine',
+                url: 'https://earthengine.google.com',
+                description: 'Free cloud platform with petabytes of satellite data and powerful analysis tools.',
+                details: 'Multiple sources | Cost: Free for research | API: Yes'
+            },
+            'planet': {
+                name: 'Planet',
+                url: 'https://www.planet.com',
+                description: 'High-quality commercial imagery (0.5-5m) with daily global coverage. Excellent platform and API.',
+                details: 'Resolution: 0.5-5m | Cost: $6-40/sqkm | Updates: Daily'
+            },
+            'maxar': {
+                name: 'Maxar',
+                url: 'https://www.maxar.com',
+                description: 'Ultra-high resolution commercial imagery (30-50cm). Best for detailed analysis.',
+                details: 'Resolution: 0.3-0.5m | Cost: $25-50/sqkm | Updates: On-demand'
+            },
+            'airbus': {
+                name: 'Airbus',
+                url: 'https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery',
+                description: 'Commercial optical imagery and DEMs (0.3-5m) with global coverage.',
+                details: 'Resolution: 0.3-5m | Cost: $5-25/sqkm | Updates: On-demand'
+            },
+            'capella-iceye': {
+                name: 'Capella / Iceye',
+                url: 'https://www.capellaspace.com',
+                description: 'High-resolution commercial SAR (25cm-1m). Works in any weather, day or night.',
+                details: 'Resolution: 0.25-1m | Cost: $4000-6000/image | Updates: On-demand'
+            },
+            'pixxel': {
+                name: 'Pixxel / Wyvern',
+                url: 'https://www.pixxel.space',
+                description: 'Hyperspectral imagery (5m) for detailed material analysis and detection.',
+                details: 'Resolution: 5m | Cost: $150-230/seat/month | Updates: On-demand'
+            },
+            'opentopography': {
+                name: 'OpenTopography / SRTM',
+                url: 'https://opentopography.org',
+                description: 'Free elevation and LiDAR data with high accuracy for terrain analysis.',
+                details: 'Resolution: 0.5-30m | Cost: Free | Type: Elevation'
+            },
+            'openstreetmap': {
+                name: 'OpenStreetMap',
+                url: 'https://www.openstreetmap.org',
+                description: 'Free, editable vector data for roads, buildings, and points of interest.',
+                details: 'Type: Vector | Cost: Free | Updates: Continuous'
+            }
+        };
+
+        function init() {
+            showWelcome();
+        }
+
+        function showWelcome() {
+            setTimeout(() => {
+                addAssistantMessage("Hi! I'm here to help you find the perfect satellite data provider. 👋");
+            }, 500);
+            
+            setTimeout(() => {
+                addAssistantMessage("Let's start with a simple question: What are you trying to accomplish with satellite data?");
+                showOptions([
+                    { text: "Agriculture & crop monitoring", value: "agriculture" },
+                    { text: "Disaster response & monitoring", value: "disaster" },
+                    { text: "Urban planning & development", value: "urban" },
+                    { text: "Environmental monitoring", value: "environment" },
+                    { text: "Infrastructure monitoring", value: "infrastructure" },
+                    { text: "Research & analysis", value: "research" },
+                    { text: "Other / Not sure", value: "other" }
+                ]);
+            }, 1500);
+        }
+
+        function addAssistantMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant';
+            messageDiv.textContent = text;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = text;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            const chatContainer = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideTyping() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        function showOptions(options) {
+            document.getElementById('inputContainer').classList.add('hidden');
+            const chatContainer = document.getElementById('chatContainer');
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option.text;
+                btn.onclick = () => handleOption(option.text, option.value);
+                optionsDiv.appendChild(btn);
+            });
+            
+            chatContainer.appendChild(optionsDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function handleOption(displayText, value) {
+            // Remove options
+            const options = document.querySelector('.options');
+            if (options) options.remove();
+            
+            // Add user's choice
+            addUserMessage(displayText);
+            
+            // Process based on current step
+            if (currentStep === 'welcome') {
+                userData.useCase = value;
+                askBudget();
+            } else if (currentStep === 'budget') {
+                userData.budget = value;
+                askDataType();
+            } else if (currentStep === 'dataType') {
+                userData.dataType = value;
+                askResolution();
+            } else if (currentStep === 'resolution') {
+                userData.resolution = value;
+                showRecommendations();
+            }
+        }
+
+        function askBudget() {
+            currentStep = 'budget';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("Great! Now, what's your budget situation?");
+                showOptions([
+                    { text: "Need free/open data", value: "free" },
+                    { text: "Have budget for commercial data", value: "paid" },
+                    { text: "Not sure yet", value: "flexible" }
+                ]);
+            }, 1000);
+        }
+
+        function askDataType() {
+            currentStep = 'dataType';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What type of satellite data do you need?");
+                showOptions([
+                    { text: "📸 Optical imagery (standard photos)", value: "optical" },
+                    { text: "📡 SAR/Radar (works through clouds)", value: "sar" },
+                    { text: "🌡️ Thermal (heat detection)", value: "thermal" },
+                    { text: "🌈 Hyperspectral (detailed analysis)", value: "hyperspectral" },
+                    { text: "⛰️ Elevation/Terrain data", value: "elevation" },
+                    { text: "🗺️ Vector maps (roads, buildings)", value: "vector" }
+                ]);
+            }, 1000);
+        }
+
+        function askResolution() {
+            currentStep = 'resolution';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What level of detail do you need?");
+                showOptions([
+                    { text: "High detail (<1m) - see individual cars", value: "ultrahigh" },
+                    { text: "Medium-high (1-10m) - see buildings clearly", value: "high" },
+                    { text: "Medium (10-100m) - see fields and neighborhoods", value: "medium" },
+                    { text: "Coarse (>100m) - large scale monitoring", value: "coarse" }
+                ]);
+            }, 1000);
+        }
+
+        function showRecommendations() {
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                
+                const recommendations = getRecommendations();
+                
+                if (recommendations.length === 0) {
+                    addAssistantMessage("Based on your requirements, I'd recommend exploring multiple providers. Let me show you some options:");
+                    recommendations.push('sentinel-copernicus', 'planet', 'google-earth-engine');
+                } else {
+                    addAssistantMessage(`Perfect! Based on your needs (${userData.useCase}, ${userData.budget} budget, ${userData.dataType} data at ${userData.resolution} resolution), here are my top recommendations:`);
+                }
+                
+                setTimeout(() => {
+                    const chatContainer = document.getElementById('chatContainer');
+                    recommendations.forEach((key, index) => {
+                        setTimeout(() => {
+                            const provider = providers[key];
+                            const card = document.createElement('div');
+                            card.className = 'provider-card';
+                            card.innerHTML = `
+                                <h4>${provider.name}</h4>
+                                <p>${provider.description}</p>
+                                <p style="font-size: 12px; color: #999;">${provider.details}</p>
+                                <a href="${provider.url}" target="_blank">Visit Provider →</a>
+                            `;
+                            chatContainer.appendChild(card);
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        }, index * 400);
+                    });
+                    
+                    setTimeout(() => {
+                        addAssistantMessage("Need to start over with different requirements?");
+                        const restartBtn = document.createElement('button');
+                        restartBtn.className = 'option-btn restart-btn';
+                        restartBtn.textContent = '🔄 Start New Search';
+                        restartBtn.onclick = restart;
+                        chatContainer.appendChild(restartBtn);
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }, recommendations.length * 400 + 500);
+                }, 800);
+            }, 1000);
+        }
+
+        function getRecommendations() {
+            const recs = [];
+            
+            // Free optical
+            if (userData.budget === 'free' && userData.dataType === 'optical') {
+                if (userData.resolution === 'medium') recs.push('sentinel-copernicus');
+                if (userData.resolution === 'coarse') recs.push('modis-viirs');
+                if (userData.resolution === 'high' || userData.resolution === 'medium') recs.push('landsat');
+                recs.push('google-earth-engine');
+            }
+            
+            // Paid optical
+            if (userData.budget === 'paid' && userData.dataType === 'optical') {
+                if (userData.resolution === 'ultrahigh') {
+                    recs.push('maxar', 'airbus');
+                } else if (userData.resolution === 'high') {
+                    recs.push('planet', 'maxar');
+                }
+            }
+            
+            // SAR
+            if (userData.dataType === 'sar') {
+                if (userData.budget === 'free') {
+                    recs.push('sentinel-copernicus', 'google-earth-engine');
+                } else {
+                    recs.push('capella-iceye');
+                }
+            }
+            
+            // Hyperspectral
+            if (userData.dataType === 'hyperspectral') {
+                recs.push('pixxel');
+            }
+            
+            // Elevation
+            if (userData.dataType === 'elevation') {
+                if (userData.budget === 'free') {
+                    recs.push('opentopography');
+                } else {
+                    recs.push('airbus', 'maxar');
+                }
+            }
+            
+            // Vector
+            if (userData.dataType === 'vector') {
+                recs.push('openstreetmap');
+            }
+            
+            // Flexible budget
+            if (userData.budget === 'flexible') {
+                if (userData.dataType === 'optical' && userData.resolution === 'high') {
+                    recs.push('sentinel-copernicus', 'planet');
+                }
+            }
+            
+            return [...new Set(recs)].slice(0, 3);
+        }
+
+        function restart() {
+            userData = {
+                useCase: '',
+                budget: '',
+                dataType: '',
+                resolution: '',
+                updateFrequency: ''
+            };
+            currentStep = 'welcome';
+            document.getElementById('chatContainer').innerHTML = '';
+            document.getElementById('inputContainer').classList.add('hidden');
+            showWelcome();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            // Simple acknowledgment for free-form input
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("Thanks for sharing! Let me ask you a few quick questions to find the best match.");
+                setTimeout(() => askBudget(), 1000);
+            }, 1000);
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
