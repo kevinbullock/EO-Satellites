@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapping Data provider - Smart Assistant</title>
+    <title>Mapping Data Finder</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
@@ -84,12 +84,6 @@
         .icon {
             font-size: 48px;
             margin-bottom: 15px;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
         
         h1 {
@@ -241,57 +235,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         
-        .input-container {
-            padding: 20px 40px 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .input-wrapper {
-            display: flex;
-            gap: 12px;
-        }
-        
-        input[type="text"] {
-            flex: 1;
-            padding: 14px 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        
-        input[type="text"]:focus {
-            border-color: #fff;
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-        }
-        
-        button {
-            padding: 14px 24px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            color: #667eea;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
         .restart-btn {
             padding: 10px 20px;
             font-size: 13px;
@@ -309,35 +252,26 @@
         <div class="header">
             <div class="icon">🗺️</div>
             <h1>Mapping Data Finder</h1>
-            <p class="subtitle">Smart assistant to find your perfect satellite data provider</p>
+            <p class="subtitle">Find the perfect geospatial data source for your project</p>
         </div>
         
         <div class="chat-container" id="chatContainer"></div>
-        
-        <div class="input-container" id="inputContainer">
-            <div class="input-wrapper">
-                <input 
-                    type="text" 
-                    id="userInput" 
-                    placeholder="Type your answer..."
-                    onkeypress="if(event.key==='Enter') sendMessage()"
-                >
-                <button onclick="sendMessage()" id="sendButton">Send</button>
-            </div>
-        </div>
     </div>
 
     <script>
         let currentStep = 'welcome';
+        let dataPath = ''; // imagery, elevation, or mapping
         let userData = {
-            useCase: '',
+            category: '',
+            type: '',
             budget: '',
-            dataType: '',
             resolution: '',
-            updateFrequency: ''
+            coverage: '',
+            editable: ''
         };
 
         const providers = {
+            // Imagery providers
             'sentinel-copernicus': {
                 name: 'Sentinel Hub / Copernicus',
                 url: 'https://scihub.copernicus.eu',
@@ -380,8 +314,14 @@
                 description: 'Commercial optical imagery and DEMs (0.3-5m) with global coverage.',
                 details: 'Resolution: 0.3-5m | Cost: $5-25/sqkm | Updates: On-demand'
             },
+            'blacksky': {
+                name: 'Blacksky',
+                url: 'https://www.blacksky.com',
+                description: 'Commercial high-resolution optical imagery with 35cm resolution.',
+                details: 'Resolution: 0.35-1m | Cost: $25/sqkm | Updates: On-demand'
+            },
             'capella-iceye': {
-                name: 'Capella / Iceye',
+                name: 'Capella / Iceye / Umbra',
                 url: 'https://www.capellaspace.com',
                 description: 'High-resolution commercial SAR (25cm-1m). Works in any weather, day or night.',
                 details: 'Resolution: 0.25-1m | Cost: $4000-6000/image | Updates: On-demand'
@@ -392,17 +332,87 @@
                 description: 'Hyperspectral imagery (5m) for detailed material analysis and detection.',
                 details: 'Resolution: 5m | Cost: $150-230/seat/month | Updates: On-demand'
             },
-            'opentopography': {
-                name: 'OpenTopography / SRTM',
-                url: 'https://opentopography.org',
-                description: 'Free elevation and LiDAR data with high accuracy for terrain analysis.',
-                details: 'Resolution: 0.5-30m | Cost: Free | Type: Elevation'
+            'nasa-earthdata': {
+                name: 'NASA Earthdata',
+                url: 'https://earthdata.nasa.gov',
+                description: 'Comprehensive portal for NASA Earth science data including thermal and multi-spectral.',
+                details: 'Multiple sensors | Cost: Free | Updates: Varies'
             },
+            'orora-muon': {
+                name: 'Orora Tech / Muon Space',
+                url: 'https://www.ororatech.com',
+                description: 'Commercial thermal imagery for wildfire detection and monitoring.',
+                details: 'Resolution: 5-80m | Cost: $25/sqkm | Updates: On-demand'
+            },
+            
+            // Elevation providers
+            'opentopography': {
+                name: 'OpenTopography',
+                url: 'https://opentopography.org',
+                description: 'Free high-resolution LiDAR data with regional coverage and custom processing tools.',
+                details: 'Resolution: 0.5-5m | Cost: Free | Coverage: Regional'
+            },
+            'srtm': {
+                name: 'SRTM',
+                url: 'https://www.usgs.gov/centers/eros/science/usgs-eros-archive-digital-elevation-shuttle-radar-topography-mission-srtm',
+                description: 'Free global elevation data from 2000. Good for general terrain analysis.',
+                details: 'Resolution: 30m (US), 90m (global) | Cost: Free'
+            },
+            'usgs-national-map': {
+                name: 'USGS National Map',
+                url: 'https://apps.nationalmap.gov',
+                description: 'High-quality elevation data with excellent US coverage including 3DEP.',
+                details: 'Resolution: 1-10m | Cost: Free | Coverage: US-focused'
+            },
+            'airbus-dem': {
+                name: 'Airbus WorldDEM',
+                url: 'https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery',
+                description: 'Commercial global DEM with high accuracy and resolution.',
+                details: 'Resolution: 12m | Cost: Commercial | Coverage: Global'
+            },
+            'maxar-dem': {
+                name: 'Maxar DEM',
+                url: 'https://www.maxar.com',
+                description: 'Ultra-high resolution commercial elevation data derived from satellite imagery.',
+                details: 'Resolution: 0.5-2m | Cost: Commercial | Coverage: Global'
+            },
+            
+            // Mapping providers
             'openstreetmap': {
                 name: 'OpenStreetMap',
                 url: 'https://www.openstreetmap.org',
-                description: 'Free, editable vector data for roads, buildings, and points of interest.',
-                details: 'Type: Vector | Cost: Free | Updates: Continuous'
+                description: 'Free, editable vector data for roads, buildings, and points of interest. Community-maintained.',
+                details: 'Type: Vector | Cost: Free | Editable: Yes | Coverage: Global'
+            },
+            'overture-maps': {
+                name: 'Overture Maps',
+                url: 'https://overturemaps.org',
+                description: 'Open, interoperable map data for places, roads, and boundaries. Backed by major tech companies.',
+                details: 'Type: Vector | Cost: Free | Updates: Regular | Coverage: Global'
+            },
+            'microsoft-building-footprints': {
+                name: 'Microsoft Building Footprints',
+                url: 'https://github.com/microsoft/USBuildingFootprints',
+                description: 'Free AI-extracted building polygons for multiple countries.',
+                details: 'Type: Buildings | Cost: Free | Coverage: US, Canada, parts of Africa/Asia'
+            },
+            'natural-earth': {
+                name: 'Natural Earth',
+                url: 'https://www.naturalearthdata.com',
+                description: 'Free vector and raster map data at multiple scales. Perfect for cartography.',
+                details: 'Type: Boundaries, cultural, physical | Cost: Free | Scale: 1:10m - 1:110m'
+            },
+            'here-maps': {
+                name: 'HERE Maps',
+                url: 'https://www.here.com',
+                description: 'Commercial mapping data with high accuracy for roads, POIs, and navigation.',
+                details: 'Type: Roads, POIs | Cost: Commercial | Coverage: Global'
+            },
+            'tomtom': {
+                name: 'TomTom',
+                url: 'https://www.tomtom.com',
+                description: 'Commercial mapping data with traffic-optimized road networks.',
+                details: 'Type: Roads, POIs, traffic | Cost: Commercial | Coverage: Global'
             }
         };
 
@@ -412,19 +422,15 @@
 
         function showWelcome() {
             setTimeout(() => {
-                addAssistantMessage("Hi! I'm here to help you find the perfect satellite data provider. 👋");
+                addAssistantMessage("Hi! I'll help you find the right mapping data for your project.");
             }, 500);
             
             setTimeout(() => {
-                addAssistantMessage("Let's start with a simple question: What are you trying to accomplish with satellite data?");
+                addAssistantMessage("Let's start with the basics: What type of data do you need?");
                 showOptions([
-                    { text: "Agriculture & crop monitoring", value: "agriculture" },
-                    { text: "Disaster response & monitoring", value: "disaster" },
-                    { text: "Urban planning & development", value: "urban" },
-                    { text: "Environmental monitoring", value: "environment" },
-                    { text: "Infrastructure monitoring", value: "infrastructure" },
-                    { text: "Research & analysis", value: "research" },
-                    { text: "Other / Not sure", value: "other" }
+                    { text: "Imagery (satellite/aerial photos)", value: "imagery" },
+                    { text: "Elevation (terrain/topography)", value: "elevation" },
+                    { text: "Mapping (roads/buildings/boundaries)", value: "mapping" }
                 ]);
             }, 1500);
         }
@@ -463,7 +469,6 @@
         }
 
         function showOptions(options) {
-            document.getElementById('inputContainer').classList.add('hidden');
             const chatContainer = document.getElementById('chatContainer');
             const optionsDiv = document.createElement('div');
             optionsDiv.className = 'options';
@@ -481,71 +486,177 @@
         }
 
         function handleOption(displayText, value) {
-            // Remove options
             const options = document.querySelector('.options');
             if (options) options.remove();
             
-            // Add user's choice
             addUserMessage(displayText);
             
-            // Process based on current step
             if (currentStep === 'welcome') {
-                userData.useCase = value;
-                askBudget();
-            } else if (currentStep === 'budget') {
+                userData.category = value;
+                dataPath = value;
+                
+                if (value === 'imagery') {
+                    askImageryType();
+                } else if (value === 'elevation') {
+                    askElevationBudget();
+                } else if (value === 'mapping') {
+                    askMappingType();
+                }
+            } else if (currentStep === 'imageryType') {
+                userData.type = value;
+                askImageryBudget();
+            } else if (currentStep === 'imageryBudget') {
                 userData.budget = value;
-                askDataType();
-            } else if (currentStep === 'dataType') {
-                userData.dataType = value;
-                askResolution();
-            } else if (currentStep === 'resolution') {
+                askImageryResolution();
+            } else if (currentStep === 'imageryResolution') {
                 userData.resolution = value;
+                showRecommendations();
+            } else if (currentStep === 'elevationBudget') {
+                userData.budget = value;
+                askElevationResolution();
+            } else if (currentStep === 'elevationResolution') {
+                userData.resolution = value;
+                askElevationCoverage();
+            } else if (currentStep === 'elevationCoverage') {
+                userData.coverage = value;
+                showRecommendations();
+            } else if (currentStep === 'mappingType') {
+                userData.type = value;
+                askMappingBudget();
+            } else if (currentStep === 'mappingBudget') {
+                userData.budget = value;
+                askMappingEditable();
+            } else if (currentStep === 'mappingEditable') {
+                userData.editable = value;
                 showRecommendations();
             }
         }
 
-        function askBudget() {
-            currentStep = 'budget';
+        // Imagery flow
+        function askImageryType() {
+            currentStep = 'imageryType';
             showTyping();
             setTimeout(() => {
                 hideTyping();
-                addAssistantMessage("Great! Now, what's your budget situation?");
+                addAssistantMessage("What type of imagery do you need?");
                 showOptions([
-                    { text: "Need free/open data", value: "free" },
-                    { text: "Have budget for commercial data", value: "paid" },
-                    { text: "Not sure yet", value: "flexible" }
+                    { text: "Optical (standard photos)", value: "optical" },
+                    { text: "SAR/Radar (works through clouds)", value: "sar" },
+                    { text: "Hyperspectral (detailed spectral analysis)", value: "hyperspectral" },
+                    { text: "Thermal (heat/temperature)", value: "thermal" }
                 ]);
             }, 1000);
         }
 
-        function askDataType() {
-            currentStep = 'dataType';
+        function askImageryBudget() {
+            currentStep = 'imageryBudget';
             showTyping();
             setTimeout(() => {
                 hideTyping();
-                addAssistantMessage("What type of satellite data do you need?");
+                addAssistantMessage("What's your budget?");
                 showOptions([
-                    { text: "📸 Optical imagery (standard photos)", value: "optical" },
-                    { text: "📡 SAR/Radar (works through clouds)", value: "sar" },
-                    { text: "🌡️ Thermal (heat detection)", value: "thermal" },
-                    { text: "🌈 Hyperspectral (detailed analysis)", value: "hyperspectral" },
-                    { text: "⛰️ Elevation/Terrain data", value: "elevation" },
-                    { text: "🗺️ Vector maps (roads, buildings)", value: "vector" }
+                    { text: "Free/Open data", value: "free" },
+                    { text: "Commercial/Paid data", value: "paid" }
                 ]);
             }, 1000);
         }
 
-        function askResolution() {
-            currentStep = 'resolution';
+        function askImageryResolution() {
+            currentStep = 'imageryResolution';
             showTyping();
             setTimeout(() => {
                 hideTyping();
-                addAssistantMessage("What level of detail do you need?");
+                addAssistantMessage("What resolution do you need?");
                 showOptions([
-                    { text: "High detail (<1m) - see individual cars", value: "ultrahigh" },
-                    { text: "Medium-high (1-10m) - see buildings clearly", value: "high" },
-                    { text: "Medium (10-100m) - see fields and neighborhoods", value: "medium" },
-                    { text: "Coarse (>100m) - large scale monitoring", value: "coarse" }
+                    { text: "Ultra-high (<1m) - see individual objects", value: "ultrahigh" },
+                    { text: "High (1-10m) - see buildings clearly", value: "high" },
+                    { text: "Medium (10-100m) - see fields/neighborhoods", value: "medium" },
+                    { text: "Coarse (>100m) - large area monitoring", value: "coarse" }
+                ]);
+            }, 1000);
+        }
+
+        // Elevation flow
+        function askElevationBudget() {
+            currentStep = 'elevationBudget';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What's your budget?");
+                showOptions([
+                    { text: "Free/Open data", value: "free" },
+                    { text: "Commercial/Paid data", value: "paid" }
+                ]);
+            }, 1000);
+        }
+
+        function askElevationResolution() {
+            currentStep = 'elevationResolution';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What resolution/accuracy do you need?");
+                showOptions([
+                    { text: "High accuracy (<1m) - detailed terrain", value: "high" },
+                    { text: "Medium (1-10m) - general terrain analysis", value: "medium" },
+                    { text: "Coarse (>30m) - regional overview", value: "coarse" }
+                ]);
+            }, 1000);
+        }
+
+        function askElevationCoverage() {
+            currentStep = 'elevationCoverage';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What's your coverage area?");
+                showOptions([
+                    { text: "United States", value: "us" },
+                    { text: "Global", value: "global" },
+                    { text: "Specific region", value: "regional" }
+                ]);
+            }, 1000);
+        }
+
+        // Mapping flow
+        function askMappingType() {
+            currentStep = 'mappingType';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What type of mapping data do you need?");
+                showOptions([
+                    { text: "Roads & transportation", value: "roads" },
+                    { text: "Buildings & structures", value: "buildings" },
+                    { text: "Points of interest (POIs)", value: "pois" },
+                    { text: "Boundaries & administrative", value: "boundaries" },
+                    { text: "All of the above", value: "all" }
+                ]);
+            }, 1000);
+        }
+
+        function askMappingBudget() {
+            currentStep = 'mappingBudget';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("What's your budget?");
+                showOptions([
+                    { text: "Free/Open data", value: "free" },
+                    { text: "Commercial/Paid data", value: "paid" }
+                ]);
+            }, 1000);
+        }
+
+        function askMappingEditable() {
+            currentStep = 'mappingEditable';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addAssistantMessage("Do you need to edit or contribute to the data?");
+                showOptions([
+                    { text: "Yes, editable/open", value: "yes" },
+                    { text: "No, read-only is fine", value: "no" }
                 ]);
             }, 1000);
         }
@@ -557,12 +668,7 @@
                 
                 const recommendations = getRecommendations();
                 
-                if (recommendations.length === 0) {
-                    addAssistantMessage("Based on your requirements, I'd recommend exploring multiple providers. Let me show you some options:");
-                    recommendations.push('sentinel-copernicus', 'planet', 'google-earth-engine');
-                } else {
-                    addAssistantMessage(`Perfect! Based on your needs (${userData.useCase}, ${userData.budget} budget, ${userData.dataType} data at ${userData.resolution} resolution), here are my top recommendations:`);
-                }
+                addAssistantMessage(`Perfect! Based on your requirements, here are my top recommendations:`);
                 
                 setTimeout(() => {
                     const chatContainer = document.getElementById('chatContainer');
@@ -583,10 +689,10 @@
                     });
                     
                     setTimeout(() => {
-                        addAssistantMessage("Need to start over with different requirements?");
+                        addAssistantMessage("Need different recommendations?");
                         const restartBtn = document.createElement('button');
                         restartBtn.className = 'option-btn restart-btn';
-                        restartBtn.textContent = '🔄 Start New Search';
+                        restartBtn.textContent = 'Start New Search';
                         restartBtn.onclick = restart;
                         chatContainer.appendChild(restartBtn);
                         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -598,55 +704,55 @@
         function getRecommendations() {
             const recs = [];
             
-            // Free optical
-            if (userData.budget === 'free' && userData.dataType === 'optical') {
-                if (userData.resolution === 'medium') recs.push('sentinel-copernicus');
-                if (userData.resolution === 'coarse') recs.push('modis-viirs');
-                if (userData.resolution === 'high' || userData.resolution === 'medium') recs.push('landsat');
-                recs.push('google-earth-engine');
-            }
-            
-            // Paid optical
-            if (userData.budget === 'paid' && userData.dataType === 'optical') {
-                if (userData.resolution === 'ultrahigh') {
-                    recs.push('maxar', 'airbus');
-                } else if (userData.resolution === 'high') {
-                    recs.push('planet', 'maxar');
-                }
-            }
-            
-            // SAR
-            if (userData.dataType === 'sar') {
+            // Imagery recommendations
+            if (dataPath === 'imagery') {
                 if (userData.budget === 'free') {
-                    recs.push('sentinel-copernicus', 'google-earth-engine');
-                } else {
-                    recs.push('capella-iceye');
+                    if (userData.type === 'optical') {
+                        if (userData.resolution === 'medium') recs.push('sentinel-copernicus', 'google-earth-engine');
+                        if (userData.resolution === 'high') recs.push('landsat', 'sentinel-copernicus');
+                        if (userData.resolution === 'coarse') recs.push('modis-viirs', 'google-earth-engine');
+                    } else if (userData.type === 'sar') {
+                        recs.push('sentinel-copernicus', 'google-earth-engine');
+                    } else if (userData.type === 'thermal') {
+                        recs.push('nasa-earthdata', 'modis-viirs');
+                    }
+                } else if (userData.budget === 'paid') {
+                    if (userData.type === 'optical') {
+                        if (userData.resolution === 'ultrahigh') recs.push('maxar', 'airbus', 'blacksky');
+                        if (userData.resolution === 'high') recs.push('planet', 'maxar');
+                    } else if (userData.type === 'sar') {
+                        recs.push('capella-iceye');
+                    } else if (userData.type === 'hyperspectral') {
+                        recs.push('pixxel');
+                    } else if (userData.type === 'thermal') {
+                        recs.push('orora-muon');
+                    }
                 }
             }
             
-            // Hyperspectral
-            if (userData.dataType === 'hyperspectral') {
-                recs.push('pixxel');
-            }
-            
-            // Elevation
-            if (userData.dataType === 'elevation') {
+            // Elevation recommendations
+            else if (dataPath === 'elevation') {
                 if (userData.budget === 'free') {
-                    recs.push('opentopography');
-                } else {
-                    recs.push('airbus', 'maxar');
+                    if (userData.coverage === 'us') recs.push('usgs-national-map', 'opentopography');
+                    if (userData.coverage === 'global') recs.push('srtm', 'opentopography');
+                    if (userData.coverage === 'regional') recs.push('opentopography', 'srtm');
+                    if (userData.resolution === 'high') recs.push('opentopography');
+                } else if (userData.budget === 'paid') {
+                    if (userData.resolution === 'high') recs.push('maxar-dem', 'airbus-dem');
+                    else recs.push('airbus-dem');
                 }
             }
             
-            // Vector
-            if (userData.dataType === 'vector') {
-                recs.push('openstreetmap');
-            }
-            
-            // Flexible budget
-            if (userData.budget === 'flexible') {
-                if (userData.dataType === 'optical' && userData.resolution === 'high') {
-                    recs.push('sentinel-copernicus', 'planet');
+            // Mapping recommendations
+            else if (dataPath === 'mapping') {
+                if (userData.budget === 'free') {
+                    if (userData.editable === 'yes') recs.push('openstreetmap');
+                    if (userData.type === 'buildings') recs.push('microsoft-building-footprints', 'openstreetmap');
+                    if (userData.type === 'boundaries') recs.push('natural-earth', 'overture-maps');
+                    else recs.push('openstreetmap', 'overture-maps');
+                } else if (userData.budget === 'paid') {
+                    if (userData.type === 'roads' || userData.type === 'pois') recs.push('here-maps', 'tomtom');
+                    else recs.push('here-maps');
                 }
             }
             
@@ -655,36 +761,19 @@
 
         function restart() {
             userData = {
-                useCase: '',
+                category: '',
+                type: '',
                 budget: '',
-                dataType: '',
                 resolution: '',
-                updateFrequency: ''
+                coverage: '',
+                editable: ''
             };
+            dataPath = '';
             currentStep = 'welcome';
             document.getElementById('chatContainer').innerHTML = '';
-            document.getElementById('inputContainer').classList.add('hidden');
             showWelcome();
         }
 
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const message = input.value.trim();
-            if (!message) return;
-            
-            addUserMessage(message);
-            input.value = '';
-            
-            // Simple acknowledgment for free-form input
-            showTyping();
-            setTimeout(() => {
-                hideTyping();
-                addAssistantMessage("Thanks for sharing! Let me ask you a few quick questions to find the best match.");
-                setTimeout(() => askBudget(), 1000);
-            }, 1000);
-        }
-
-        // Initialize
         init();
     </script>
 </body>
