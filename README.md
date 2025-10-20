@@ -24,6 +24,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Satellogic | [link](https://www.satellogic.com) | Satellite (Optical) | 0.7–1m | Commercial | $8–$18/sqkm | Yes | Global coverage |
 | Orora Tech | [link](https://www.ororatech.com) | Satellite (Thermal) | 80m | Commercial | $25/sqkm | Yes | Wildfire detection |
 | Muon Space | [link](https://www.muonspace.com) | Satellite (Firesat) | 5m | Commercial | n/a | Yes | Environmental monitoring |
+| Constellr | [link](https://constellr.com) |  |  |  |  |  |  |
 
 ## Commercial SAR Satellites
 
@@ -33,6 +34,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Capella Space | [link](https://www.capellaspace.com) | Satellite (SAR) | 0.5m | Commercial | $4000–6000/image | Yes | High-resolution SAR |
 | Iceye | [link](https://www.iceye.com) | Satellite (SAR) | 25cm–1m | Commercial | $5000/image | Yes | Global coverage |
 | Synspective | [link](https://synspective.com) | Satellite (SAR) | 1–3m | Commercial | Varies | Yes | SAR provider |
+| Iqps - QPS | [link](https://i-qps.net/en/) |  |  |  |  |  |  |
 
 ## Commercial Hyperspectral Satellites
 
@@ -47,6 +49,14 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
 |-------------|-----|-----------|------------|---------|------|------------|-------|
 | OpenAerialMap | [link](https://map.openaerialmap.org/#/) | Aerial | Varies | Open | Free | Yes | Global coverage |
+| Hexagon | [link](https://hexagon.com) |  |  |  |  |  |  |
+| Vexcel | [link](https://vexcel.com) |  |  |  |  |  |  |
+| Nearmap | [link](https://nearmap.com) |  |  |  |  |  |  |
+
+## Weather Data
+
+| Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
+|-------------|-----|-----------|------------|---------|------|------------|-------|
 
 ## Elevation & LiDAR Data
 
@@ -56,7 +66,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | USGS National Map | [link](https://apps.nationalmap.gov) | Elevation, Hydro, Vector | 1–10m | Public Domain | Free | Yes | Great US coverage |
 | SRTM | [link](https://www.usgs.gov/centers/eros/science/usgs-eros-archive-digital-elevation-shuttle-radar-topography-mission-srtm) | Elevation (DEM) | 30m (US), 90m (global) | Public Domain | Free | Yes | Global elevation from 2000 |
 
-## Vector Data
+## Vector Data (not exhaustive)
 
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
 |-------------|-----|-----------|------------|---------|------|------------|-------|
@@ -74,7 +84,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Radiant Earth MLHub | [link](https://mlhub.earth) | ML-ready datasets | Varies | Varies | Free | Yes | Training data for ML applications |
 | SkyFi | [link](https://skyfi.com) |  |  |  |  |  |  |
 | SkyWatch | [link](https://skywatch.com) |  |  |  |  |  |  |
-| Up42 | [link]() |  |  |  |  |  |  |
+| Up42 | [link](https://up42.com) |  |  |  |  |  |  |
 
 ---
 
