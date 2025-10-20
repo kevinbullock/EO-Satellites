@@ -17,7 +17,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
 |-------------|-----|-----------|------------|---------|------|------------|-------|
-| Maxar | [link](https://www.maxar.com) | Satellite (Optical) & DEM | 0.3–0.5m | Commercial | $25–$50/sqkm | Yes | Global coverage |
+| Maxar (throwback name) | [link](https://www.maxar.com) | Satellite (Optical) & DEM | 0.3–0.5m | Commercial | $25–$50/sqkm | Yes | Global coverage |
 | Airbus | [link](https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery) | Satellite (Optical) & DEM | 0.3–5m | Commercial | $5–25/sqkm | Yes | Global DEM & Imagery |
 | Planet | [link](https://www.planet.com) | Satellite (Optical) | 0.5–5m | Commercial | $6–$40/sqkm | Yes | Global, excellent platform |
 | Blacksky | [link](https://www.blacksky.com) | Satellite (Optical) | 0.35–1m | Commercial | $25/sqkm | Yes | Global, new 35cm archive |
