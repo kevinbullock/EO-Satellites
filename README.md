@@ -42,6 +42,12 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Wyvern | [link](https://www.wyvern.space) | Satellite (Hyperspectral) | 5.3m | Commercial | $230/seat/year | Yes | Global coverage |
 | Orbital Sidekick | [link](https://www.orbitalsidekick.com) | Satellite (Hyperspectral) | 8m | Commercial | n/a | Yes | Global coverage |
 
+## Aerial Data
+
+| Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
+|-------------|-----|-----------|------------|---------|------|------------|-------|
+| OpenAerialMap | [link]([https://www.pixxel.space](https://map.openaerialmap.org/#/)) | Aerial | Varies | Open | Free | Yes | Global coverage |
+
 ## Elevation & LiDAR Data
 
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
