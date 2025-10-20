@@ -46,7 +46,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
 |-------------|-----|-----------|------------|---------|------|------------|-------|
-| OpenAerialMap | [link]((https://map.openaerialmap.org/#/)) | Aerial | Varies | Open | Free | Yes | Global coverage |
+| OpenAerialMap | [link](https://map.openaerialmap.org/#/) | Aerial | Varies | Open | Free | Yes | Global coverage |
 
 ## Elevation & LiDAR Data
 
