@@ -72,6 +72,9 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Mapbox | [link](https://docs.mapbox.com/api/guides/) | Multiple datasets | Varies | Commercial | Varies | Yes | Custom maps and satellite |
 | AWS Open Data Registry | [link](https://registry.opendata.aws) | Multiple datasets | Varies | Open | Free (egress fees) | Yes | Hosts Sentinel, Landsat, NAIP |
 | Radiant Earth MLHub | [link](https://mlhub.earth) | ML-ready datasets | Varies | Varies | Free | Yes | Training data for ML applications |
+| SkyFi | [link](https://skyfi.com) |  |  |  |  |  |  |
+| SkyWatch | [link](https://skywatch.com) |  |  |  |  |  |  |
+| Up42 | [link]() |  |  |  |  |  |  |
 
 ---
 
