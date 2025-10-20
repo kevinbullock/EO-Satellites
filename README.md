@@ -82,6 +82,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Mapbox | [link](https://docs.mapbox.com/api/guides/) | Multiple datasets | Varies | Commercial | Varies | Yes | Custom maps and satellite |
 | AWS Open Data Registry | [link](https://registry.opendata.aws) | Multiple datasets | Varies | Open | Free (egress fees) | Yes | Hosts Sentinel, Landsat, NAIP |
 | Radiant Earth MLHub | [link](https://mlhub.earth) | ML-ready datasets | Varies | Varies | Free | Yes | Training data for ML applications |
+| Planet Insights Platform (formerly Sentinel Hub) | [link](https://docs.planet.com/) | Analaysis platform | Varies | Varies | Varies | Yes | Cloud processing for Sentinel, Landsat, and commercial Planet imagery. |
 | SkyFi | [link](https://skyfi.com) |  |  |  |  |  |  |
 | SkyWatch | [link](https://skywatch.com) |  |  |  |  |  |  |
 | Up42 | [link](https://up42.com) |  |  |  |  |  |  |
