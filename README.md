@@ -1,6 +1,6 @@
-# Earth Observation Sources
+# Mapping Data Sources
 
-I am aggregating a list of Earth Observation sources and pertinent info, feel free to contribute.
+I am aggregating a list of mapping data, geospatial and Earth Observation sources. , feel free to contribute.
 
 ## Free/Open Satellite Data
 
@@ -63,6 +63,7 @@ I am aggregating a list of Earth Observation sources and pertinent info, feel fr
 |-------------|-----|-----------|------------|---------|------|------------|-------|
 | Google Earth Engine | [link](https://earthengine.google.com) | Analysis platform | Varies | Free for research/edu | Free (non-commercial) | Yes | Petabytes of data, cloud processing |
 | Microsoft Planetary Computer | [link](https://planetarycomputer.microsoft.com) | Multiple datasets | Varies | Varies | Free | Yes | Catalog with Sentinel, Landsat, more |
+| Mapbox | [link](https://docs.mapbox.com/api/guides/) | Multiple datasets | Varies | Commercial | Varies | Yes | Custom maps and satellite |
 | AWS Open Data Registry | [link](https://registry.opendata.aws) | Multiple datasets | Varies | Open | Free (egress fees) | Yes | Hosts Sentinel, Landsat, NAIP |
 | Radiant Earth MLHub | [link](https://mlhub.earth) | ML-ready datasets | Varies | Varies | Free | Yes | Training data for ML applications |
 
