@@ -49,9 +49,9 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Source Name | URL | Data Type | Resolution | License | Cost | API Access | Notes |
 |-------------|-----|-----------|------------|---------|------|------------|-------|
 | OpenAerialMap | [link](https://map.openaerialmap.org/#/) | Aerial | Varies | Open | Free | Yes | Global coverage |
-| Hexagon | [link](https://hexagon.com) |  |  |  |  |  |  |
-| Vexcel | [link](https://vexcel.com) |  |  |  |  |  |  |
-| Nearmap | [link](https://nearmap.com) |  |  |  |  |  |  |
+| Hexagon | [link](https://hexagon.com/products/aerial-imagery) | Aerial  | 15cm-30cm | Commercial | Varies |  |  |
+| Vexcel | [link](https://vexcel.com) | Aerial  | 30cm | Commercial | Varies |  |  |
+| Nearmap | [link](https://nearmap.com) | Aerial  | 10cm | Commercial | Varies |  |  |
 
 ## Weather Data
 
