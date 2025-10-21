@@ -33,8 +33,8 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Umbra | [link](https://www.umbra.space) | Satellite (SAR) | 25cm–1m | CC 4.0 | [varies/sqkm](https://umbra.space/pricing/) | Yes | High-resolution SAR |
 | Capella Space | [link](https://www.capellaspace.com) | Satellite (SAR) | 0.5m | Commercial | $4000–6000/image | Yes | High-resolution SAR |
 | Iceye | [link](https://www.iceye.com) | Satellite (SAR) | 25cm–1m | Commercial | $5000/image | Yes | Global coverage |
-| Synspective | [link](https://synspective.com) | Satellite (SAR) | 1–3m | Commercial | Varies | Yes | SAR provider |
-| Iqps - QPS | [link](https://i-qps.net/en/) |  |  |  |  |  |  |
+| Synspective | [link](https://synspective.com) | Satellite (SAR) | 1–3m | Commercial | Varies | Yes | Global coverage |
+| Iqps - QPS | [link](https://i-qps.net/en/) |  Satellite (SAR) | 0.5m-1m | Commercial | Varies | n/a | Increasing constellation |
 
 ## Commercial Hyperspectral Satellites
 
