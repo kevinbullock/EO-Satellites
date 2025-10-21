@@ -1,6 +1,6 @@
 # Mapping Data Sources
 
-I am aggregating a list of mapping data, geospatial and Earth Observation sources. , feel free to contribute.
+I am aggregating a list of mapping data, geospatial, and Earth Observation sources. Feel free to contribute.
 
 ## Free/Open Satellite Data
 
