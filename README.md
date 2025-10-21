@@ -24,7 +24,7 @@ I am aggregating a list of mapping data, geospatial and Earth Observation source
 | Satellogic | [link](https://www.satellogic.com) | Satellite (Optical) | 0.7–1m | Commercial | $8–$18/sqkm | Yes | Global coverage |
 | Orora Tech | [link](https://www.ororatech.com) | Satellite (Thermal) | 80m | Commercial | $25/sqkm | Yes | Wildfire detection |
 | Muon Space | [link](https://www.muonspace.com) | Satellite (Firesat) | 5m | Commercial | n/a | Yes | Environmental monitoring |
-| Constellr | [link](https://constellr.com) |  |  |  |  |  |  |
+| Constellr | [link](https://constellr.com) | Satellite (Thermal) | 10m | Commercial | n/a | Yes | Global coverage |
 
 ## Commercial SAR Satellites
 
